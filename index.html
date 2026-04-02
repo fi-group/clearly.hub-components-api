@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test</title>
+  <script id="oup-bootstrap" src="./dist/oup.min.js"></script>
+</head>
+
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <button onClick="javascript:handleComponent()" style="height:50px; font-size:16px;">
+      run component
+    </button>
+  </div>
+  <script>
+    // callback function to receive data from the component. 
+    // This will be called when the component is closed,
+    const receivedDataCallback = (data) => {
+      console.log('Received data from Components:', data);
+    };
+
+    // when using type === 'redirect'::
+    window.addEventListener('load', () => {
+      window.oupapi.components.getRedirectResult(receivedDataCallback);
+    });
+
+    function handleComponent() {
+      window.oupapi.components.open({
+        component: {
+          // SELECT_HUB
+          // SELECT_SUBSCRIPTION
+          // REGISTER_RESOURCE (needs extra params)::
+          actions: ['SELECT_HUB'],
+          client_id: '<YOUR_CLIENT_ID>',
+          // popup or redirect
+          type: 'popup',
+        },
+        // used when using type === 'popup'::
+        callback: receivedDataCallback,
+      });
+    }
+  </script>
+</body>
+
+</html>

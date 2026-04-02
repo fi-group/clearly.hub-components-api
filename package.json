@@ -1,0 +1,22 @@
+{
+  "name": "clearly-hub-components-api",
+  "version": "1.0.0",
+  "main": "dist/oup.js",
+  "types": "dist/oup.d.ts",
+  "scripts": {
+    "build": "node build.mjs --minify",
+    "watch:build": "node build.mjs --watch",
+    "watch:build:min": "node build.mjs --watch --minify",
+    "dev": "serve -p 8080 .",
+    "watch": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "serve": "^14.2.6",
+    "typescript": "^5.9.3"
+  }
+}
