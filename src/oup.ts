@@ -11,6 +11,8 @@
  * The `id="oup-bootstrap"` attribute is required when `document.currentScript`
  * is unavailable (e.g. deferred/async scripts or certain legacy browsers).
  */
+import { COMPONENT_LAUNCH, CONFIG_KEY, DEFAULTS, SETTINGS_KEY } from './common/constants';
+
 (() => {
   /**
    * Resolves the `<script>` element that loaded this bootstrap file.
@@ -104,7 +106,29 @@
     parent.appendChild(script);
   };
 
+  /**
+   * Hides the host page while it is only acting as a transit page for a component:
+   * - when launching (popup or redirect), right before navigating to the components URL;
+   * - when a popup receives the result, right before it closes itself.
+   * For a redirect result the page stays visible, as the user lands back on it.
+   *
+   * Runs synchronously from `<head>`, so the page never gets painted.
+   */
+  const hideTransitPage = () => {
+    const params = new URLSearchParams(location.search);
+    const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const config = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
+    const isLaunching = params.get(COMPONENT_LAUNCH) === '1';
+    const isPopupResult = settings.type !== 'redirect'
+      && params.get(config.param || DEFAULTS.DATA_PARAM) !== null;
+    if (isLaunching || isPopupResult) {
+      document.documentElement.style.visibility = 'hidden';
+    }
+  };
+
   // --- Entry point ---
+
+  hideTransitPage();
 
   const currentScript = getCurrentScript();
   // Guard: if the script element or its src cannot be determined, do nothing.
